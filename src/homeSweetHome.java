@@ -2,8 +2,7 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-/*  160315021 Ayşegül DALKIRAN
-    160315063 Baki Fatih IŞIK
+/*  
 
     Project has 3 classes. Guest class represents our guest which held values like how much cake eaten, borek eaten or
     drink taken from our table. Class has a constructor that only sets name. guest.class has 3 method of eating and
@@ -34,11 +33,10 @@ import java.util.concurrent.TimeUnit;
 
 public class homeSweetHome {
     public static void main(String[] args) {
-        //condition of waiter thread to be stop
-        final Boolean[] done = {true};
+        // condition of waiter thread to be stop
+        final Boolean[] done = { true };
 
-
-        //objects of guests
+        // objects of guests
         guest guest1 = new guest("guest 1");
         guest guest2 = new guest("guest 2");
         guest guest3 = new guest("guest 3");
@@ -63,21 +61,20 @@ public class homeSweetHome {
         guestOList.add(guest10);
         table table1 = new table();
 
-
         Thread waiter = new Thread(new Runnable() {
             @Override
             public void run() {
                 System.out.println("Starting...");
-                //Checking if there is any food or beverage to be served
+                // Checking if there is any food or beverage to be served
 
-                while (table1.anyBorekHasLeftOnCase() || table1.anyCakeHasLeftOnCase() || table1.anyDrinkHasLeftOnCase()) {
+                while (table1.anyBorekHasLeftOnCase() || table1.anyCakeHasLeftOnCase()
+                        || table1.anyDrinkHasLeftOnCase()) {
 
-                    //System.out.println("Have utilities");
-                    //waiter fills spots
+                    // System.out.println("Have utilities");
+                    // waiter fills spots
                     if (table1.initCakeOnTable == 0 && table1.anyCakeHasLeftOnCase()) {
                         table1.fillTableCakes();
                         System.out.println("|> Added Cake to table");
-
 
                     }
 
@@ -85,26 +82,25 @@ public class homeSweetHome {
                         table1.fillTableBorek();
                         System.out.println("|> Added Borek to table");
 
-
                     }
                     if (table1.initDrinkOnTable == 0 && table1.anyDrinkHasLeftOnCase()) {
                         table1.fillTableDrink();
                         System.out.println("|> Added Drink to table");
 
-
                     }
 
-
                 }
-                //Stops when out of food
+                // Stops when out of food
                 done[0] = false;
                 System.out.println("OUT OF FOOD");
-                //printing what have eaten
-                //total eaten = first 10 on tray + taken from case
+                // printing what have eaten
+                // total eaten = first 10 on tray + taken from case
                 int total = 10;
                 System.out.println("-----------SUMMARY---------");
                 for (int i = 0; i < guestOList.size(); i++) {
-                    System.out.println(guestOList.get(i).name + "|||" + " borek eaten:" + guestOList.get(i).borekEaten + " cake eaten: " + guestOList.get(i).cakeEaten + " drink taken: " + guestOList.get(i).drinkTaken);
+                    System.out.println(guestOList.get(i).name + "|||" + " borek eaten:" + guestOList.get(i).borekEaten
+                            + " cake eaten: " + guestOList.get(i).cakeEaten + " drink taken: "
+                            + guestOList.get(i).drinkTaken);
                     total = total + guestOList.get(i).borekEaten;
                     total = total + guestOList.get(i).cakeEaten;
                     total = total + guestOList.get(i).drinkTaken;
@@ -115,29 +111,28 @@ public class homeSweetHome {
             }
         });
 
-
-        //initialize guest behaviour as a thread
+        // initialize guest behaviour as a thread
         Thread party = new Thread(new Runnable() {
             @Override
             public void run() {
 
-
-                while (table1.anyBorekHasLeftOnCase() && table1.anyBorekHasLeftOnTable() || table1.anyCakeHasLeftOnCase() && table1.anyCakeHasLeftOnTable() || table1.anyDrinkHasLeftOnCase() && table1.anyDrinkHasLeftOnTable()) {
+                while (table1.anyBorekHasLeftOnCase() && table1.anyBorekHasLeftOnTable()
+                        || table1.anyCakeHasLeftOnCase() && table1.anyCakeHasLeftOnTable()
+                        || table1.anyDrinkHasLeftOnCase() && table1.anyDrinkHasLeftOnTable()) {
                     int guestEatenAllCount = 0;
                     // <-- START OF THE FIRST ROUND -->
-                    //System.out.println("Have utilities");
+                    // System.out.println("Have utilities");
                     while (guestEatenAllCount < 30) {
 
                         Random rand = new Random();
                         int pickGuest = rand.nextInt(10);
-                        //Taking first 3 food
+                        // Taking first 3 food
                         if (!guestOList.get(pickGuest).haveEatenAll()) {
                             if (guestOList.get(pickGuest).cakeEaten == 0) {
                                 guestOList.get(pickGuest).eatCake();
                                 guestEatenAllCount++;
                                 System.out.println(guestOList.get(pickGuest).name + " eats cake");
                                 table1.takeCakeTable();
-
 
                             } else if (guestOList.get(pickGuest).borekEaten == 0) {
                                 guestOList.get(pickGuest).eatBorek();
@@ -146,7 +141,6 @@ public class homeSweetHome {
                                 table1.takeBorekTable();
                                 table1.takeCakeTable();
 
-
                             } else if (guestOList.get(pickGuest).drinkTaken == 0) {
                                 guestOList.get(pickGuest).takeDrink();
                                 System.out.println(guestOList.get(pickGuest).name + " drinks");
@@ -154,26 +148,25 @@ public class homeSweetHome {
                                 table1.takeDrinkTable();
                                 table1.takeCakeTable();
 
-
                             }
-
 
                         }
                     }
 
                     // <-- END OF THE FIRST ROUND -->
                     System.out.println("done first 10 round");
-                    //done first 10 rounds now for the rest of it
+                    // done first 10 rounds now for the rest of it
                     // <-- START OF MAIN PART -->
                     while (done[0]) {
-                        //done is the key for table reserves finishes
+                        // done is the key for table reserves finishes
 
-                        //Guest chooses which food to eat RANDOMLY
+                        // Guest chooses which food to eat RANDOMLY
                         Random rand = new Random();
                         int pickGuestN = rand.nextInt(10);
                         int pickFood = rand.nextInt(3); // 0 for borek, 1 for cake, 2 for drink
                         if (pickFood == 0 && guestOList.get(pickGuestN).borekEaten <= 5) {
-                            //Condition to take a Borek. It has to choose it and must have eaten less than 5
+                            // Condition to take a Borek. It has to choose it and must have eaten less than
+                            // 5
                             if (table1.anyBorekHasLeftOnTable()) {
                                 guestOList.get(pickGuestN).eatBorek();
                                 table1.takeBorekTable();
@@ -186,27 +179,26 @@ public class homeSweetHome {
                                     e.printStackTrace();
                                 }
 
-
                             }
                         } else if (pickFood == 1 && guestOList.get(pickGuestN).cakeEaten <= 2) {
-                            //Condition to take a Cake. It has to choose it and must have eaten less than 2
+                            // Condition to take a Cake. It has to choose it and must have eaten less than 2
                             if (table1.anyCakeHasLeftOnTable()) {
                                 guestOList.get(pickGuestN).eatCake();
                                 table1.takeCakeTable();
                                 System.out.println(guestOList.get(pickGuestN).name + " eats cake");
 
                                 table1.takeCakeTable();
-                                //thread to sleep in order to make an interrupt with waiter thread
+                                // thread to sleep in order to make an interrupt with waiter thread
                                 try {
                                     Thread.sleep(100);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
 
-
                             }
                         } else if (pickFood == 2 && guestOList.get(pickGuestN).drinkTaken <= 5) {
-                            //Condition to take a Drink. It has to choose it and must have eaten less than 5
+                            // Condition to take a Drink. It has to choose it and must have eaten less than
+                            // 5
                             if (table1.anyDrinkHasLeftOnTable()) {
                                 guestOList.get(pickGuestN).takeDrink();
                                 table1.takeDrinkTable();
@@ -223,7 +215,6 @@ public class homeSweetHome {
 
                         }
 
-
                     }
                     // <-- END OF THE MAIN PART -->
 
@@ -235,12 +226,6 @@ public class homeSweetHome {
         waiter.start();
         party.start();
 
-
     }
 
-
 }
-
-
-
-
